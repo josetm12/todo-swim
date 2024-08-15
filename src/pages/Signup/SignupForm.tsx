@@ -11,15 +11,14 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
 const formSchema = z.object({
   email: z
     .string()
     .min(1, { message: 'Email is required.' })
     .email('This is not a valid email.'),
-  firstname: z.string().trim().min(1, { message: 'First name is required.' }),
-  lastname: z.string().trim(),
+  first_name: z.string().trim().min(1, { message: 'First name is required.' }),
+  last_name: z.string().trim(),
   password: z.string().min(3, { message: 'Must be 3 or more characters long' }),
 });
 
@@ -29,8 +28,8 @@ const SignupForm = ({ onSubmit, isLoading }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
-      firstname: '',
-      lastname: '',
+      first_name: '',
+      last_name: '',
       password: '',
     },
   });
@@ -55,7 +54,7 @@ const SignupForm = ({ onSubmit, isLoading }) => {
 
           <FormField
             control={form.control}
-            name="firstname"
+            name="first_name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>First name</FormLabel>
@@ -68,7 +67,7 @@ const SignupForm = ({ onSubmit, isLoading }) => {
           />
           <FormField
             control={form.control}
-            name="lastname"
+            name="last_name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Last name</FormLabel>
