@@ -1,5 +1,5 @@
-import { LaneProps, TodoDataWID } from '@/lib/types';
-import { useQuery } from '@tanstack/react-query';
+import { LaneProps, TodoData, TodoDataWID } from '@/lib/types';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import todoService from '@/services/todoService';
 
 import { Skeleton } from '@/components/ui/skeleton';
@@ -12,6 +12,7 @@ export default function Lane({ lane }: LaneProps) {
     queryKey: ['todos', { status: lane }],
     queryFn: () => todoService.list({ status: lane }),
   });
+  const queryClient = useQueryClient();
 
   if (data) {
     console.log('tanstack query - data', data);
@@ -25,10 +26,32 @@ export default function Lane({ lane }: LaneProps) {
     return <div>Error loading {lane} status todos.</div>;
   }
 
+  const handleDrop = async (
+    e: React.DragEvent<HTMLElement>,
+    lane: TodoData['status']
+  ) => {
+    e.preventDefault();
+    debugger;
+    const id = e.dataTransfer.getData('id');
+
+    // const task = tasks.find((task) => )
+    try {
+      await todoService.updateSome(id, { status: lane });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    }
+  };
+
   return (
-    <ScrollArea className="swimlane-content flex-1">
+    <ScrollArea
+      onDrop={(e) => handleDrop(e, lane)}
+      onDragOver={(e) => e.preventDefault()}
+      className="swimlane-content flex-1"
+    >
       {data.map((todo: TodoDataWID, index: number) => (
-        <TodoCard key={lane + index} data={todo} index={index} />
+        <TodoCard key={lane + index} data={todo} />
       ))}
     </ScrollArea>
   );
