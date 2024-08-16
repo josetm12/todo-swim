@@ -160,36 +160,34 @@ const DesktopContainer = () => {
   const queryClient = useQueryClient();
 
   return (
-    <DndContext>
-      <div className="swimlanes-ct h-full grid grid-cols-3 gap-4">
-        {swimLanes.map((lane, index) => (
-          <div
-            key={index}
-            className="swimlane h-app-body p-4 rounded-lg flex flex-col"
-          >
-            <div className="swimlane-title flex flex-row items-center justify-between">
-              <h3 className="text-xl font-semibold mb-2">{lane}</h3>
+    <div className="swimlanes-ct h-full grid grid-cols-3 gap-4">
+      {swimLanes.map((lane, index) => (
+        <div
+          key={index}
+          className="swimlane h-app-body p-4 rounded-lg flex flex-col"
+        >
+          <div className="swimlane-title flex flex-row items-center justify-between">
+            <h3 className="text-xl font-semibold mb-2">{lane}</h3>
 
-              <TodoFormPopup
-                onSubmit={async (data) => {
-                  const updatedData = await createTodo(data);
-                  queryClient.invalidateQueries({
-                    queryKey: ['todos', { status: swimLaneValues[index] }],
-                  });
-                  return updatedData;
-                }}
-                data={getInitialData(swimLaneValues[index])}
-              >
-                <Button variant="ghost" className="p-2">
-                  <Plus />
-                </Button>
-              </TodoFormPopup>
-            </div>
-            <Lane lane={swimLaneValues[index]} />
+            <TodoFormPopup
+              onSubmit={async (data) => {
+                const updatedData = await createTodo(data);
+                queryClient.invalidateQueries({
+                  queryKey: ['todos', { status: swimLaneValues[index] }],
+                });
+                return updatedData;
+              }}
+              data={getInitialData(swimLaneValues[index])}
+            >
+              <Button variant="ghost" className="p-2">
+                <Plus />
+              </Button>
+            </TodoFormPopup>
           </div>
-        ))}
-      </div>
-    </DndContext>
+          <Lane lane={swimLaneValues[index]} />
+        </div>
+      ))}
+    </div>
   );
 };
 

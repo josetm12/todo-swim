@@ -37,7 +37,7 @@ const MenuButton: React.FC<TodoMenuButtonProps> = ({
 
   const handleUpdate = async (data: TodoData) => {
     console.log('handle update', data);
-    debugger;
+
     const todoData = await todoService.updateAll(todoId, {
       title: data.title,
       status: data.status,

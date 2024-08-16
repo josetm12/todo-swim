@@ -1,4 +1,4 @@
-import { LaneProps, TodoData } from '@/lib/types';
+import { LaneProps, TodoDataWID } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
 import todoService from '@/services/todoService';
 
@@ -27,8 +27,8 @@ export default function Lane({ lane }: LaneProps) {
 
   return (
     <ScrollArea className="swimlane-content flex-1">
-      {data.map((todo: TodoData) => (
-        <TodoCard data={todo} />
+      {data.map((todo: TodoDataWID, index: number) => (
+        <TodoCard key={lane + index} data={todo} index={index} />
       ))}
     </ScrollArea>
   );

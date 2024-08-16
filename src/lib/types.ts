@@ -42,6 +42,10 @@ export interface TodoData {
   is_priority: boolean;
 }
 
+export interface TodoDataWID extends TodoData {
+  id: string;
+}
+
 export interface ListTodosParams {
   status?: string;
   is_priority?: boolean;
