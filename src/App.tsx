@@ -4,6 +4,7 @@ import {
   Routes,
   Navigate,
 } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { ThemeProvider } from '@/components/theme-provider';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -15,6 +16,8 @@ import Signup from '@/pages/Signup/Signup';
 
 import './App.css';
 import Header from '@/components/Header';
+
+const queryClient = new QueryClient();
 
 function AppContent() {
   const { user, isLoading } = useAuth();
@@ -59,8 +62,12 @@ function App() {
   return (
     <AuthProvider>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <Header />
-        <AppContent />
+        <QueryClientProvider client={queryClient}>
+          <Header />
+          <main className="h-app-body">
+            <AppContent />
+          </main>
+        </QueryClientProvider>
       </ThemeProvider>
     </AuthProvider>
   );

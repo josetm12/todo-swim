@@ -59,6 +59,12 @@
   }
 }
 
+:root {
+  --header-height: 3rem;
+  --body-height: calc(100vh - var(--header-height))
+}
+
+
 @layer base {
   * {
     @apply border-border;

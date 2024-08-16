@@ -14,8 +14,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  // const [user, setUser] = useState<User | null>({
+  //   id: '1',
+  //   email: 'test@test.com',
+  //   first_name: 'f',
+  //   last_name: 'l',
+  // });
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onLogin = (userData: User) => {
     setUser(userData);
