@@ -1,12 +1,16 @@
 import { LaneProps, TodoDataWID } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
 import todoService from '@/services/todoService';
+import { useDroppable } from '@dnd-kit/core';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import TodoCard from '@/components/TodoCard/TodoCard';
 
 export default function Lane({ lane }: LaneProps) {
+  const id: string = lane;
+  const { setNodeRef } = useDroppable({ id });
+
   // Queries
   const { isLoading, error, data, isFetching } = useQuery({
     queryKey: ['todos', { status: lane }],
@@ -26,7 +30,7 @@ export default function Lane({ lane }: LaneProps) {
   }
 
   return (
-    <ScrollArea className="swimlane-content flex-1">
+    <ScrollArea className="swimlane-content flex-1" ref={setNodeRef}>
       {data.map((todo: TodoDataWID, index: number) => (
         <TodoCard key={lane + index} data={todo} index={index} />
       ))}

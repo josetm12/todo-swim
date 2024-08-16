@@ -6,7 +6,7 @@ import { debounceFn } from '@/lib/utils';
 import { TodoData } from '@/lib/types';
 import TodoFormPopup from '@/components/TodoFormPopup/TodoFormPopup';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { DndContext } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, closestCorners } from '@dnd-kit/core';
 
 import Lane from '@/pages/Home/Lane';
 import {
@@ -159,35 +159,55 @@ const DesktopContainer = () => {
   // Get QueryClient from the context
   const queryClient = useQueryClient();
 
-  return (
-    <div className="swimlanes-ct h-full grid grid-cols-3 gap-4">
-      {swimLanes.map((lane, index) => (
-        <div
-          key={index}
-          className="swimlane h-app-body p-4 rounded-lg flex flex-col"
-        >
-          <div className="swimlane-title flex flex-row items-center justify-between">
-            <h3 className="text-xl font-semibold mb-2">{lane}</h3>
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
 
-            <TodoFormPopup
-              onSubmit={async (data) => {
-                const updatedData = await createTodo(data);
-                queryClient.invalidateQueries({
-                  queryKey: ['todos', { status: swimLaneValues[index] }],
-                });
-                return updatedData;
-              }}
-              data={getInitialData(swimLaneValues[index])}
-            >
-              <Button variant="ghost" className="p-2">
-                <Plus />
-              </Button>
-            </TodoFormPopup>
+    debugger;
+    if (over && active.id !== over.id) {
+      const todoId = active.id as string;
+      const newStatus = over.id as string;
+
+      // Update the todo's status
+      await todoService.updateSome(todoId, { status: newStatus });
+
+      // Invalidate queries to refetch data
+      queryClient.invalidateQueries({
+        queryKey: ['todos'],
+      });
+    }
+  };
+
+  return (
+    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+      <div className="swimlanes-ct h-full grid grid-cols-3 gap-4">
+        {swimLanes.map((lane, index) => (
+          <div
+            key={index}
+            className="swimlane h-app-body p-4 rounded-lg flex flex-col"
+          >
+            <div className="swimlane-title flex flex-row items-center justify-between">
+              <h3 className="text-xl font-semibold mb-2">{lane}</h3>
+
+              <TodoFormPopup
+                onSubmit={async (data) => {
+                  const updatedData = await createTodo(data);
+                  queryClient.invalidateQueries({
+                    queryKey: ['todos', { status: swimLaneValues[index] }],
+                  });
+                  return updatedData;
+                }}
+                data={getInitialData(swimLaneValues[index])}
+              >
+                <Button variant="ghost" className="p-2">
+                  <Plus />
+                </Button>
+              </TodoFormPopup>
+            </div>
+            <Lane lane={swimLaneValues[index]} />
           </div>
-          <Lane lane={swimLaneValues[index]} />
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </DndContext>
   );
 };
 

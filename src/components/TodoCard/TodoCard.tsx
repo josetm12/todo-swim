@@ -1,18 +1,33 @@
-import React from 'react';
-import { TodoData } from '@/lib/types';
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
+
+import { TodoDataWID } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardFooter, CardContent } from '@/components/ui/card';
 import MenuButton from './MenuButton';
 
-export default function TodoCard({ data }: { data: TodoData }) {
-  console.log('Todo Card', data);
-  // const editTodo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   console.log(e);
-  //   console.log('Todo Data Edit', data);
-  // };
+interface TodoCardProps {
+  data: TodoDataWID;
+  index: number;
+}
+
+const TodoCard: React.FC<TodoCardProps> = ({ data, index }) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: data.id,
+  });
+  debugger;
+  const style = {
+    transform: CSS.Translate.toString(transform),
+  };
 
   return (
-    <Card className="mr-3 mb-3 py-2 px-4 bg-primary-foreground">
+    <Card
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="mr-3 mb-3 py-2 px-4 bg-primary-foreground z-50 relative"
+    >
       <CardContent className="p-0 flex flex-row gap-4 items-center justify-start">
         <p className="text-md">{data.title}</p>
         <MenuButton
@@ -26,4 +41,6 @@ export default function TodoCard({ data }: { data: TodoData }) {
       </CardFooter>
     </Card>
   );
-}
+};
+
+export default TodoCard;
