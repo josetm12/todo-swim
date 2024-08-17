@@ -25,12 +25,10 @@ const Signup: React.FC = () => {
 
       const formData = { ...values };
       formData.email.toLowerCase();
-      console.log('Submit Register Form', formData);
 
       try {
-        const userData = await authService.register(formData);
+        await authService.register(formData);
         navigate('/login');
-        console.log('Signup - ', userData);
       } catch (error) {
         console.error('Login failed:', error);
         setError('ERROR - CHANGE ME');

@@ -22,7 +22,6 @@ const Login: React.FC = () => {
     // ✅ This will be type-safe and validated.
     const formData = { ...values };
     formData.email.toLowerCase();
-    console.log('Clicked Submit', formData);
 
     try {
       const userData = await authService.login({

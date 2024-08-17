@@ -23,7 +23,6 @@ const createTodo = async (data: TodoData) => {
     status: data.status,
     is_priority: data.is_priority,
   });
-  console.log(todoData);
 
   return todoData;
 };
@@ -144,7 +143,7 @@ const MobileContainer = () => {
               key={lane + index}
               className="w-full flex-shrink-0 p-4 rounded-lg"
             >
-              <Lane lane={swimLaneValues[index]} />
+              <Lane lane={swimLaneValues[index]} isMobile={true} />
             </div>
           ))}
         </div>
@@ -184,7 +183,7 @@ const DesktopContainer = () => {
               </Button>
             </TodoFormPopup>
           </div>
-          <Lane lane={swimLaneValues[index]} />
+          <Lane lane={swimLaneValues[index]} isMobile={false} />
         </div>
       ))}
     </div>

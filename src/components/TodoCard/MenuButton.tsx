@@ -36,16 +36,13 @@ const MenuButton: React.FC<TodoMenuButtonProps> = ({
   };
 
   const handleUpdate = async (data: TodoData) => {
-    console.log('handle update', data);
-
     const todoData = await todoService.updateAll(todoId, {
       title: data.title,
       status: data.status,
       is_priority: data.is_priority,
     });
-    console.log(todoData);
 
-    return data;
+    return todoData;
   };
 
   const onStatusChange = (newTodoStatus: string) => {
@@ -53,11 +50,9 @@ const MenuButton: React.FC<TodoMenuButtonProps> = ({
   };
 
   const updateTodoStatus = async (newTodoStatus: string) => {
-    console.log(newTodoStatus);
     const todoData = await todoService.updateSome(todoId, {
       status: newTodoStatus,
     });
-    console.log(todoData);
     queryClient.invalidateQueries({
       queryKey: ['todos'],
     });
@@ -67,7 +62,7 @@ const MenuButton: React.FC<TodoMenuButtonProps> = ({
 
   const deleteTodo = async (todoId: string) => {
     const todoData = await todoService.delete(todoId);
-    console.log(todoData);
+
     queryClient.invalidateQueries({
       queryKey: ['todos', { status: defaultData.status }],
     });

@@ -58,7 +58,6 @@ function AppContent() {
 }
 
 function App() {
-  console.log('App render');
   return (
     <AuthProvider>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

@@ -72,4 +72,5 @@ export interface TodoFormPopupProps {
 
 export interface LaneProps {
   lane: TodoData['status'];
+  isMobile: boolean;
 }
